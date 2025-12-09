@@ -6,7 +6,10 @@ This repository contains all the scripts and pipelines to simulate realistic flu
 -
 
 # Repository structure
-
+- Modified SelfNet Code
+- Simulation Images
+- Image pre-processing
+- Evaluation: code statitics
 
 # Software dependencies and Environment
 

@@ -1,9 +1,5 @@
-# IsotropicImageReconstruction
-Methods to perform patch-wise isotropic reconstruction of 3D microscopy images
-This repository contains all the scripts and pipelines to simulate realistic fluorescence microscopy images. These pipelines were used to evaluate deconvolution and isotropic restoration methods as shown in the manuscript "title".
-
-# Overview
--
+# 3D benchmarking dataset for bioimage analysis
+This repository contains all the codes used to generate the 3D liver dataset for bencharmk different image analysis task such as image restoration, tubular segmentation and nuclei segmentation of different structures in real and simulated images.
 
 # Repository structure
 - Modified SelfNet Code
@@ -11,12 +7,10 @@ This repository contains all the scripts and pipelines to simulate realistic flu
 - Image pre-processing
 - Evaluation: code statitics
 
-# Software dependencies and Environment
-
-
-# Installation guide
-
 # Usage
+## Image preprocessing
+Raw microscopy images were first preprocessed as follows:
+1- 
 
 # References
 - SelfNet (Paper): Ning, K., Lu, B., Wang, X. et al. Deep self-learning enables fast, high-fidelity isotropic resolution restoration for volumetric fluorescence microscopy. Light Sci Appl 12, 204 (2023). https://doi.org/10.1038/s41377-023-01230-2

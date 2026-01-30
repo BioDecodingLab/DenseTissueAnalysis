@@ -9,8 +9,35 @@ This repository contains all the codes used to generate the 3D liver dataset for
 
 # Usage
 ## Image preprocessing
-Raw microscopy images were first preprocessed as follows:
-1- 
+Raw microscopy images were preprocessed as follows:
+First, image acquisition at maximum scanning speed without line-by-line averaging introduces shifts in alternating Y-columns which results in an irregular border or “serrated edge” in the image. To correct this artefact, a custom border correction step based on the TV-L1 optical flow algorithm implemented in scikit-image library, was applied (01_border_correction.py). Because Y-columns were shifted in opposite directions, even and odd columns were separated, aligned via dense optical flow, symmetrically warped, and recombined to correct border misalignment, for details see REF (Paper Jorge). 
+During acquisition of multiple channels, small pixel displacement between channels can be observed. To correct this, a fifth channel which contains simultaneously the cell border and nuclei signal was acquired. This channel was used as reference to align all other channels using the function Correct 3D drift from Fiji (02_align_channels_3D.ijm). Used parameters: Reference channel cell border + nuclei (refChannel = 5), no threshold used (MinIntensity = 0), maximum shift of 30 voxels (maxShift = 30), length of selection square 256 x 256 pix (L= 256).
+To cover the entire CV-PV axis, images were acquired as 2 x 1 tiles, which were stitched using the stitching plugin in Fiji with the row-by-row grid option, 10% overlap and subpixel accuracy. Images were subsequently cropped in X, Y and Z to remove black pixels.
+Finally, volumetric images exhibit a depth-dependent intensity attenuation along the Z axis, resulting in reduced intensity in deeper planes. To correct this effect, image intensities were normalized for each slice and channels using cumulative histograms computed in 16 bits (nBins = 65536), mapping the 10-99.99% intensity range (Ilow = 10, Ihigh = 100). Photobleaching was corrected with the Bleach correction plugin with the Histogram matching method (03_Intensity_correction.ijm).
+
+## Conventional simulation
+For conventional simulation use the script Data_Augmentation.ipynb.
+First need a directory ordened as follows:
+- dataset
+      - images
+          - img1.tif
+          - img2.tif
+      - masks
+          - img1.tif
+          - img2.tif
+
+In the folder images are the fluorescence image.
+In the folder masks are the idealized masks or segmentation masks (must be binary)
+The files in images and their corresponding masks must have the same name
+Also you will need a experimental or generated PSF.
+
+The installation instructions are in the readme.md.
+
+Once in jupyter notebook or jupyter lab open the Data_Augmentation.ipynb. Here you have to indicate: dataset folder path, psf path and output directory, use snr_targets to determine the desired SNRs (e.g. snr_targets = [15] for only SNR 15 simulation, snr_targets = [1. 5. 10. 15] for SNR 1. 5. 10 and 15 simulation), use conv_type = '2D' for isotropic images and conv_type = '3D' for anisotropic images.
+
+## SelfNet isotropic restoration
+Here we provide a modifed version of SelfNet network (see REF) 
+
 
 # References
 - SelfNet (Paper): Ning, K., Lu, B., Wang, X. et al. Deep self-learning enables fast, high-fidelity isotropic resolution restoration for volumetric fluorescence microscopy. Light Sci Appl 12, 204 (2023). https://doi.org/10.1038/s41377-023-01230-2

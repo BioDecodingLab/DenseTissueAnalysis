@@ -48,18 +48,19 @@ Here we provide a modifed version of SelfNet network (see REF)
 All steps are performed using Jupyter Notebook.
 
 1- Generate training data.
+
       - Create a source directory with the following structure:
                   - source data
                         - structure1
                         - structure2
       
-      To generate the training data use the Generate_training_data_Iso_Simple-Liver.ipynb and specify the following parameters:
-      srcpath: path to the source data folder
-      dirSource = srcpath + 'structure1': replace 'structure1' with the name of the folder corresponding to the structure of interest
-      dirTarget = srcpath + 'structure1': same as dirSource
-      dirOut: output path
-      psf_path: path to the PSF file
-      Niter: Number of Richardson-Lucy deconvolution iterations, set 0 for SelfNet isotropic restoration only.
+To generate the training data use the Generate_training_data_Iso_Simple-Liver.ipynb and specify the following parameters:
+srcpath: path to the source data folder
+dirSource = srcpath + 'structure1': replace 'structure1' with the name of the folder corresponding to the structure of interest
+dirTarget = srcpath + 'structure1': same as dirSource
+dirOut: output path
+psf_path: path to the PSF file
+Niter: Number of Richardson-Lucy deconvolution iterations, set 0 for SelfNet isotropic restoration only.
 
 2- Training the network
       - For training use the Train_self_net.ipynb notebook. 

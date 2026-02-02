@@ -21,13 +21,13 @@ Finally, volumetric images exhibit a depth-dependent intensity attenuation along
 ## Conventional simulation
 To perform conventional simulations, use the Data_Augmentation.ipynb notebook.
 First, create a directory with the following structure:
-- dataset
-      - images
-          - img1.tif
-          - img2.tif
-      - masks
-          - img1.tif
-          - img2.tif
+      - dataset
+            - images
+                - img1.tif
+                - img2.tif
+            - masks
+                - img1.tif
+                - img2.tif
 
 In the images folder must contain the fluorescence image.
 In the masks folder must contain the idealized masks or segmentation masks (binary images)

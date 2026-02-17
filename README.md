@@ -30,6 +30,12 @@ For this we used the software MotionTracking (http://motiontracking.mpi-cbg.de) 
       File > Import > Import Microscopy images > BioFormat ImageJ   and select the segmentation
       
       Bile canaliculi: Use the script bc.p3a, this generates 
+      Sinusoids
+      Nuclei
+
+2- Triangle mesh and central lines generation
+
+3- Idealized tissue generation
 
 
 ## Conventional simulation

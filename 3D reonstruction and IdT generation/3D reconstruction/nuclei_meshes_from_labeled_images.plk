@@ -1,0 +1,83 @@
+// It takes tiff images where the object are labeled with different values and convert them to nuclei under motion tracking format.
+
+	new Src = 1;      // Channel with the segmentation (Prc). Src 1 means Prc 2.
+	new Step = 1;     // Pixel size (triangle mesh)
+	new Count = 1;    // Smoothing cycles (# of itterations)
+	new minVol = 50;	// um3
+	new maxVol = 500000;	//um3
+
+
+	minVol /= ImageFrame::Scale * ImageFrame::Scale * ImageFrame::ZScale;
+	maxVol /= ImageFrame::Scale * ImageFrame::Scale * ImageFrame::ZScale;
+
+	new srcFrame = &MotionTracking.Frame;
+	new dstFrame = &MotionTracking.ProcFrame;	
+
+	new iWidth = srcFrame->GetRealWidth(Src);
+	new iHeight = srcFrame->GetRealHeight(Src);
+	new iDepth = srcFrame->GetRealDepth(Src);
+
+
+	new proc = instance MathImage3DProc();
+
+	new Buffer = dstFrame->GetChannelData(Src);
+	new crv = MotionTracking->GetHistogram3D(Src+ImageFrame::NumberOfChannels);
+
+	//MotionTracking->AddCurve(0, crv, "", instance ColorRef(255,0,0));
+
+	new vals = << >>;
+	
+	for (new i = 0; i < crv.Y->Len(); ++i)
+		if(crv.X[i] > 0 && crv.Y[i] > 0)
+			vals ,= crv.X[i];
+
+	trace vals->Len(), " cells to segment", CR;
+	
+	new _Cells = instance Vector(vals->Len());
+	
+	new Weight = 0.5;
+
+	for (i = 0; i < vals->Len(); ++i)
+	{
+		if(vals[i] == 0)
+			continue;
+		trace i, " (", vals->Len(), ")", CR;
+		new tempBuffer = Buffer;
+		proc->MaskByValue(tempBuffer, int(vals[i]),  iWidth, iHeight, iDepth);
+		//MotionTracking::Image3D.methodos->MedianSmooth3D(tempBuffer, iWidth, iHeight, iDepth);
+		new Mesh = instance OclTriangleMesh();
+		MotionTracking::Image3D.methodos->Triangle(tempBuffer, iWidth, iHeight, iDepth, 1.0, 1.0, ImageFrame::ZScale / ImageFrame::Scale, Step, Step, Step, Mesh);
+		Mesh->SmoothCoord(0.3);
+
+		for (new ii = 0; ii < Count; ++ii)
+		{
+			Mesh->SmoothCoord(Weight);
+			new delta = 0;
+			do {
+				delta = Mesh->CombineSmallTriangles(Step);
+				if (delta > 0)
+				{
+					if (!Mesh->CheckConsistency())
+					{
+						trace "Tringulation is corrupted by CombineSmallTriangles", CR;
+						break;
+					}
+				}
+			}
+			while (delta > 0);
+		}
+
+		new nucleus = instance Nucleus3D(Mesh); 
+		if(nucleus.Volume > minVol && nucleus.Volume < maxVol)
+			_Cells[i] = nucleus;
+		else
+			_Cells[i] = EMPTY;
+	}
+
+	_Cells->RemoveEMPTY();
+	new Cells = _Cells; //instance Vector(_Cells->Len());
+	
+	srcFrame.Objects.Nuclei3DSet = << << >> >>;
+	srcFrame.Objects.Nuclei3DSet[0] <- Cells;
+	MotionTracking->UpdateFrameFlags(srcFrame);	
+trace "done", CR;

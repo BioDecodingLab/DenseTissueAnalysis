@@ -25,13 +25,7 @@ To generate idealized tissue, a triangle mesh of the segmented structures is fir
 
 For this purpose we used the software MotionTracking (http://motiontracking.mpi-cbg.de) as follows:
 
-1- Generate MotionTracking project, need to conect MT to fiji (see instructions in readme), in MT go to 
-
-      File > Import > Import Microscopy images > BioFormat ImageJ   and select the segmentation
-      
-
-
-2- Triangle mesh and central lines generation
+1- Triangle mesh and central lines generation
 
       Bile canaliculi: 
       In MT use the script bc.p3a. This script generates the triangle mesh and central lines for thin tubular networks such as bile canaliculi.
@@ -48,7 +42,7 @@ For this purpose we used the software MotionTracking (http://motiontracking.mpi-
       Run > Update File
      
 
-3- Idealized tissue generation
+2- Idealized tissue generation
 
 Once triangle mesh are generated, use the script Idelized_Mask.p3a. 
 This script generates idealized structures based on the previously generated triangle meshes and reconstructs membranes using these meshes.

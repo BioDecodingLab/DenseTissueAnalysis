@@ -2,16 +2,16 @@
 This repository contains all the codes used to generate the 3D liver dataset for bencharmk different image analysis task such as image restoration, tubular segmentation and nuclei segmentation of different structures in real and simulated images.
 
 # Repository structure
-- Modified SelfNet Code
-- Simulation Images
 - Image pre-processing
+- Simulation Images
+- Modified SelfNet Code
 - Evaluation: code statitics
 
 # Usage
 ## Image preprocessing
 Raw microscopy images were preprocessed as follows:
 
-1- 01_border_correction.py: Image acquisition at maximum scanning speed without line-by-line averaging introduces shifts in alternating Y-columns which results in an irregular border or “serrated edge” in the image. To correct this artefact, a custom border correction step based on the TV-L1 optical flow algorithm implemented in scikit-image library, was applied. Because Y-columns were shifted in opposite directions, even and odd columns were separated, aligned via dense optical flow, symmetrically warped, and recombined to correct border misalignment, for details see REF (Paper Jorge). 
+1- 01_border_correction.py: Image acquisition at maximum scanning speed without line-by-line averaging introduces shifts in alternating Y-columns which results in an irregular border or “serrated edge” in the image. To correct this artefact, a custom border correction step based on the TV-L1 optical flow algorithm implemented in scikit-image library, was applied. Because Y-columns were shifted in opposite directions, even and odd columns were separated, aligned via dense optical flow, symmetrically warped, and recombined to correct border misalignment, for details see NucVerse3D. 
 
 2- 02_align_channels_3D.ijm: During acquisition of multiple channels, small pixel displacement between channels can be observed. To correct this, a fifth channel which contains simultaneously the cell border and nuclei signal was acquired. This channel was used as reference to align all other channels using the function Correct 3D drift from Fiji. 
       Used parameters: Reference channel cell border + nuclei (refChannel = 5), no threshold used (MinIntensity = 0), maximum shift of 30 voxels (maxShift = 30), length of selection square 256 x 256 pix (L= 256).
@@ -20,22 +20,40 @@ Raw microscopy images were preprocessed as follows:
 
 4- 03_Intensity_correction.ijm: Finally, volumetric images exhibit a depth-dependent intensity attenuation along the Z axis, resulting in reduced intensity in deeper planes. To correct this effect, image intensities were normalized for each slice and channels using cumulative histograms computed in 16 bits (nBins = 65536), mapping the 10-99.99% intensity range (Ilow = 10, Ihigh = 100). Photobleaching was corrected with the Bleach correction plugin with the Histogram matching method.
 
-## Idealized tissue generation (ver1 tengo que terminarlo)
-For idealized tissue generation first a triangle mesh of the segmented structure is needed.
+## Idealized tissue generation 
+To generate idealized tissue, a triangle mesh of the segmented structures is first required. 
 
-For this we used the software MotionTracking (http://motiontracking.mpi-cbg.de) as follows:
+For this purpose we used the software MotionTracking (http://motiontracking.mpi-cbg.de) as follows:
 
 1- Generate MotionTracking project, need to conect MT to fiji (see instructions in readme), in MT go to 
 
       File > Import > Import Microscopy images > BioFormat ImageJ   and select the segmentation
       
-      Bile canaliculi: Use the script bc.p3a, this generates 
-      Sinusoids
-      Nuclei
+
 
 2- Triangle mesh and central lines generation
 
+      Bile canaliculi: 
+      In MT use the script bc.p3a. This script generates the triangle mesh and central lines for thin tubular networks such as bile canaliculi.
+
+      Sinusoids: 
+      In MT use the script sinusoids.p3a. This script generates the triangle mesh and central lines for tubular networks such as sinusoids.
+
+      Nuclei: 
+      Open PLIDE.EXE and connect it to MT.
+      Run > Connect > in Application write "motiontracking64" > OK
+      
+      In the PLIDE window, run the script nuclei_meshes_from_labeled_images.plk. Select the nuclei labels channel and execute the script 
+      In the script window:
+      Run > Update File
+     
+
 3- Idealized tissue generation
+
+Once triangle mesh are generated, use the script Idelized_Mask.p3a. 
+This script generates idealized structures based on the previously generated triangle meshes and reconstructs membranes using these meshes.
+
+
 
 
 ## Conventional simulation
@@ -123,6 +141,7 @@ Used codes for FWHM measurements:
             - remove_mid_peaks: True for nuclei, False to other structures
 
 # References
+- NucVerse3D: NucVerse3D: Generalizable 3D nuclear instance segmentation across heterogeneous microscopy modalities. Jorge Vergara, Cristian Perez-Gallardo, Ricardo Velasco, Dilan Martinez, Diego Badilla, Esteban G. Contreras, Pamela Guevara, Fabián Segovia-Miranda, Hernán Morales-Navarrete. bioRxiv 2026.02.05.704108; doi: https://doi.org/10.64898/2026.02.05.704108
 - SelfNet (Paper): Ning, K., Lu, B., Wang, X. et al. Deep self-learning enables fast, high-fidelity isotropic resolution restoration for volumetric fluorescence microscopy. Light Sci Appl 12, 204 (2023). https://doi.org/10.1038/s41377-023-01230-2
 - SelfNet (Zenodo repository): Kefu Ning, Bolin Lu, Xiaojun Wang, Xiaoyu Zhang, Shuo Nie, Tao Jiang, Anan Li, Guoqing Fan, Xiaofeng Wang, Qingming Luo, Hui Gong, & Jing Yuan. (2023). Self_Net: Deep self-learning enables fast, high-fidelity isotropic resolution restoration for volumetric fluorescence microscopy. Zenodo. https://doi.org/10.5281/zenodo.7882519
 - CycleGAN: Bettancourt N, Pérez-Gallardo C, Candia V, Guevara P, Kalaidzidis Y, Zerial M, et al. (2024) Virtual tissue microstructure reconstruction across species using generative deep learning. PLoS ONE 19(7): e0306073. https://doi.org/10.1371/journal.pone.0306073

@@ -20,7 +20,7 @@ Raw microscopy images were preprocessed as follows:
 
 4- 03_Intensity_correction.ijm: Finally, volumetric images exhibit a depth-dependent intensity attenuation along the Z axis, resulting in reduced intensity in deeper planes. To correct this effect, image intensities were normalized for each slice and channels using cumulative histograms computed in 16 bits (nBins = 65536), mapping the 10-99.99% intensity range (Ilow = 10, Ihigh = 100). Photobleaching was corrected with the Bleach correction plugin with the Histogram matching method.
 
-## Idealized tissue generation 
+## 3D reconstruction and Idealized tissue generation 
 To generate idealized tissue, a triangle mesh of the segmented structures is first required. 
 
 For this purpose we used the software MotionTracking (http://motiontracking.mpi-cbg.de) as follows:

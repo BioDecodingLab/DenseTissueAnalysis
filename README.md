@@ -23,9 +23,30 @@ Raw microscopy images were preprocessed as follows:
 ## 3D reconstruction and Idealized tissue generation 
 To generate idealized tissue, a triangle mesh of the segmented structures is first required. 
 
-For this purpose we used the software MotionTracking (http://motiontracking.mpi-cbg.de) as follows:
+For this purpose we used the software MotionTracking (http://motiontracking.mpi-cbg.de).
 
-1- Triangle mesh and central lines generation
+These steps are intended for a five chanel image (Cell border, bile canaliculi, sinusoids nuclei and cell border + nuclei)
+If you haec fewer channels, duplicate the image in Fiji and create a composite image:
+
+      Image > Duplicate
+      Image > Color > Merge Channels
+
+1- Create MotionTracking (MT) project
+
+     First, connect Fiji to MotionTracking. See the instructions in "Fiji_Connection_readme.txt".
+
+      Once Fiji is connected create a MT project:
+      
+            Open MT > Files > Import > Import Microscope Images > Bioformats/ImageJ > Select the segmentation image
+
+      Check whether the image is flipped, if this is the case:
+
+            Edit > Image Rearangement > Flip Y-axis
+            If this does not work, Options > Clear File Cache and repeat the previous step (Flip Y-axis)
+
+      
+
+2- Triangle mesh and central lines generation
 
       Bile canaliculi: 
       In MT use the script bc.p3a. This script generates the triangle mesh and central lines for thin tubular networks such as bile canaliculi.
@@ -42,7 +63,7 @@ For this purpose we used the software MotionTracking (http://motiontracking.mpi-
       Run > Update File
      
 
-2- Idealized tissue generation
+3- Idealized tissue generation
 
 Once triangle mesh are generated, use the script Idelized_Mask.p3a. 
 This script generates idealized structures based on the previously generated triangle meshes and reconstructs membranes using these meshes.

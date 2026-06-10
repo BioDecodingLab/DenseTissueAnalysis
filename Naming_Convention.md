@@ -1,5 +1,7 @@
 # Dataset Naming Convention
 
+Desciption of the naming convention used in the Bioimage Archive updated files.
+
 ## 1. Sample Identification Codes
 
 The original sample identifiers were considered too long for practical use in file names. Therefore, each of the four samples was assigned a shorter identification code:

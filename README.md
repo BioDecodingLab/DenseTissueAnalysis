@@ -97,6 +97,48 @@ Once in jupyter notebook or jupyter lab open the Data_Augmentation.ipynb. Here i
 -snr_targets: Determine the desired SNRs (e.g. snr_targets = [15] for only SNR 15 simulation, snr_targets = [1. 5. 10. 15] for SNR 1. 5. 10 and 15 simulation).
 -conv_type: '2D' for isotropic images and '3D' for anisotropic images.
 
+
+## CycleGAN model selection
+
+This section describes the procedure used to evaluate and select the final CycleGAN model. For details on CycleGAN training and usage, please refer to the original CycleGAN repository and publication.
+
+### Training
+
+Separate the dataset into:
+
+- Source domain (A): IdT mask images.
+- Target domain (B): Microscopy images.
+
+After training, the framework generates multiple checkpoints:
+
+- 3D CycleGAN: 10 checkpoints.
+- 2D CycleGAN: 20 checkpoints.
+
+Each training generates to types of models:
+
+- A to B checkpoint: Generates microscopy like images from IdT images. These models are used in this work.
+- B to A checkpoint: Generates IdT-like images from microscopy images.
+
+### Model evaluation
+
+To evaluate all candidate models:
+
+1. Generate a crop from an IdT image and save its coordinates.
+2. If using a 3D model, run eval_3D_all_models.py to generate predictions for all A → B checkpoints.
+3. Generate the corresponding crop from the microscopy image of the same sample using the saved coordinates.
+4. Create a new folder named after the sample and save the microscopy reference image with the suffix _GT.
+5. Run confocal_metrics_eval_v2_test_models.py to compute the evaluation metrics.
+6. If multiple samples are evaluated, run process_metrics_complete_model_selection.py to combine the results across samples.
+7. The script generates a summary file reporting the three best-performing checkpoints according to each evaluation metric.
+
+Quantitative metrics provide a useful estimate of model performance. However, they do not always capture visually apparent artifacts in the generated images. Therefore, final model selection should combine the quantitative evaluation with careful visual inspection of the generated images by a user familiar with the expected image characteristics. 
+To find this artefacts, use the reference microscopy image, and compare the generated images. The generated images should not have excesive noise, 
+
+(Falta agregar como detectar lso artefactos)
+
+
+
+
 ## SelfNet isotropic restoration
 Here we provide a modifed version of SelfNet network (see REF) 
 All steps are performed using Jupyter Notebook.

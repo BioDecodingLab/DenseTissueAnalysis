@@ -132,11 +132,7 @@ To evaluate all candidate models:
 7. The script generates a summary file reporting the three best-performing checkpoints according to each evaluation metric.
 
 Quantitative metrics provide a useful estimate of model performance. However, they do not always capture visually apparent artifacts in the generated images. Therefore, final model selection should combine the quantitative evaluation with careful visual inspection of the generated images by a user familiar with the expected image characteristics. 
-To find this artefacts, use the reference microscopy image, and compare the generated images. The generated images should not have excesive noise, 
-
-(Falta agregar como detectar lso artefactos)
-
-
+To identify these artifacts, visually compare the generated images with the corresponding reference microscopy image. The generated images should not exhibit excessive noise, hallucinated structures, structural distortions, or visually obvious repetitive background patterns. While some degree of repetitive texture may naturally arise in low-signal regions, these patterns should remain subtle and resemble the appearance of real microscopy images. Models producing clearly noticeable artificial patterns and artifacts that lowers the image quality should be discarded even if they achieve good quantitative scores.
 
 
 ## SelfNet isotropic restoration

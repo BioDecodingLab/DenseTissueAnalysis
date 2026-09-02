@@ -1,6 +1,9 @@
 # 3D benchmarking dataset for bioimage analysis
 This repository contains all the codes used to generate the 3D liver dataset for bencharmk different image analysis task such as image restoration, tubular segmentation and nuclei segmentation of different structures in real and simulated images.
 
+Associated publication: 
+A multi-structure 3D multiphoton liver microscopy dataset integrating real, physics-based, and GAN-simulated volumes for benchmarking bioimage analysis. https://doi.org/10.1038/s41597-026-08208-w.
+
 # Repository structure
 - Image pre-processing
 - Simulation Images
